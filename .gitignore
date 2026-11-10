@@ -1,0 +1,21 @@
+# Environment & local secrets
+.env
+*.env
+!config/cluster.env.example
+
+# Rendered runtime configs
+config/*.rendered.conf
+
+# OS & Editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.log
+__pycache__/
+*.py[cod]
+
+# Local backup or runtime data
+data/
+backups/
+logs/

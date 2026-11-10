@@ -1,0 +1,11 @@
+[Unit]
+Description=Poll Git repositories every 2 minutes for GRIP Continuous Deployment
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=2min
+RandomizedDelaySec=10s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=GRIP Basketball Instant GitHub Webhook CD Receiver
+After=network-online.target docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=-/opt/grip/config/cluster.env
+WorkingDirectory=/opt/grip/repo
+ExecStart=/usr/bin/python3 /opt/grip/repo/cd/webhook-server.py
+Restart=always
+RestartSec=5
+StandardOutput=append:/opt/grip/logs/webhook.log
+StandardError=append:/opt/grip/logs/webhook.log
+
+[Install]
+WantedBy=multi-user.target

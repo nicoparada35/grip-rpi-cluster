@@ -1,0 +1,10 @@
+[Unit]
+Description=Run GRIP Database & Court Backup Daily at 03:00 AM and 15m after boot
+
+[Timer]
+OnBootSec=15min
+OnCalendar=*-*-* 03:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

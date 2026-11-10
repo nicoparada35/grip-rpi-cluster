@@ -1,0 +1,58 @@
+# =============================================================================
+# GRIP Basketball — RPi #2 (grip-app): Spring Boot 3 Backend + Mailpit Node
+# Hardware target: Raspberry Pi 4B (4GB RAM / 32GB microSD)
+# =============================================================================
+services:
+  grip-mailpit:
+    image: axllent/mailpit:latest
+    container_name: grip-mailpit
+    restart: always
+    ports:
+      - "${GRIP_MAILPIT_UI_PORT:-8025}:8025"
+      - "${GRIP_MAILPIT_SMTP_PORT:-1025}:1025"
+    networks:
+      - grip-app-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  grip-backend:
+    build:
+      context: ../submodules/grip-basketball-fullstack/backend
+      dockerfile: Dockerfile
+    image: grip-basketball/backend:rpi-arm64
+    container_name: grip-backend
+    restart: always
+    depends_on:
+      - grip-mailpit
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-rpi}
+      GRIP_DB_URL: jdbc:postgresql://${GRIP_DB_HOST:-grip-db.local}:${GRIP_DB_PORT:-5432}/${GRIP_DB_NAME:-gripdb}
+      GRIP_DB_USER: ${GRIP_DB_USER:-grip}
+      GRIP_DB_PASSWORD: ${GRIP_DB_PASSWORD:-GripRpiCluster2026!}
+      GRIP_JWT_SECRET: ${GRIP_JWT_SECRET:-GRIP_RPI4_CLUSTER_LOCAL_SECRET_KEY_2026_64_BYTES_MINIMUM_SECURITY}
+      GRIP_JWT_EXPIRATION_MS: ${GRIP_JWT_EXPIRATION_MS:-2592000000}
+      GRIP_ADMIN_EMAIL: ${GRIP_ADMIN_EMAIL:-admin@gripbasketball.com}
+      GRIP_ADMIN_PASSWORD: ${GRIP_ADMIN_PASSWORD:-GripAdmin2026!}
+      GRIP_FRONTEND_URL: ${GRIP_FRONTEND_URL:-http://grip.local}
+      GRIP_AUTO_VERIFY_LOCAL: ${GRIP_AUTO_VERIFY_LOCAL:-true}
+      GRIP_SMTP_HOST: ${GRIP_SMTP_HOST:-grip-mailpit}
+      GRIP_SMTP_PORT: ${GRIP_SMTP_PORT:-1025}
+      JAVA_TOOL_OPTIONS: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=65.0 -XX:+UseG1GC"
+    ports:
+      - "${GRIP_BACKEND_PORT:-8080}:8080"
+    networks:
+      - grip-app-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  grip-app-net:
+    driver: bridge

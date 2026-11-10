@@ -1,0 +1,4 @@
+[submodule "submodules/grip-basketball-fullstack"]
+	path = submodules/grip-basketball-fullstack
+	url = https://github.com/Victor151203/grip-basketball-fullstack.git
+	branch = dev

@@ -1,0 +1,14 @@
+[Unit]
+Description=GRIP Basketball Court Scoreboard & Live-Tracker HDMI Kiosk
+After=systemd-user-sessions.service network-online.target grip-node.service
+Wants=network-online.target
+
+[Service]
+User=pi
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/xinit /opt/grip/kiosk-launch.sh -- :0 vt7 -nocursor
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

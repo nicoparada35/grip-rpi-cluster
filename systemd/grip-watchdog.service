@@ -1,0 +1,10 @@
+[Unit]
+Description=GRIP Basketball Self-Healing Watchdog (Repositioning & Power Recovery)
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/opt/grip/config/cluster.env
+WorkingDirectory=/opt/grip/repo
+ExecStart=/usr/bin/env bash /opt/grip/repo/scripts/grip-boot-guard.sh --watchdog
+TimeoutStartSec=300

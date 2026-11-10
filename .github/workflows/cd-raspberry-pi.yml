@@ -1,0 +1,21 @@
+name: Continuous Deployment — GRIP Raspberry Pi 4B Cluster
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  repository_dispatch:
+    types:
+      - submodule-updated
+  workflow_dispatch:
+
+jobs:
+  deploy-rpi-cluster:
+    name: Update Submodules & Deploy on Raspberry Pi Cluster
+    # Runs either on a self-hosted runner installed on grip-edge, or skips gracefully if no self-hosted runner is registered yet
+    runs-on: [self-hosted, linux, ARM64]
+    steps:
+      - name: Trigger Local & Fleet CD Script
+        run: |
+          sudo bash /opt/grip/repo/scripts/09-cd-deploy.sh --force

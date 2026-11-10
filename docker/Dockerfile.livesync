@@ -1,0 +1,10 @@
+FROM python:3.11-alpine
+
+WORKDIR /app
+
+# Install curl for container healthcheck
+RUN apk add --no-cache curl
+
+EXPOSE 5500
+
+CMD ["sh", "-c", "cp -n /app/frontend/data/*.json /app/data/ 2>/dev/null || true; exec python3 /app/scripts/dev-server.py 5500"]

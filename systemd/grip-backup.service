@@ -1,0 +1,11 @@
+[Unit]
+Description=GRIP Basketball Automated Database & Court Data Backup
+After=docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/opt/grip/config/cluster.env
+WorkingDirectory=/opt/grip/repo
+ExecStart=/usr/bin/env bash /opt/grip/repo/scripts/backup-db.sh
+StandardOutput=append:/opt/grip/logs/backup.log
+StandardError=append:/opt/grip/logs/backup.log

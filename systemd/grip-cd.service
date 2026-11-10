@@ -1,0 +1,13 @@
+[Unit]
+Description=GRIP Basketball Continuous Deployment (CD) Git Poller & Auto-Updater
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/opt/grip/config/cluster.env
+WorkingDirectory=/opt/grip/repo
+ExecStart=/usr/bin/env bash /opt/grip/repo/scripts/09-cd-deploy.sh
+TimeoutStartSec=900
+StandardOutput=append:/opt/grip/logs/cd-service.log
+StandardError=append:/opt/grip/logs/cd-service.log
