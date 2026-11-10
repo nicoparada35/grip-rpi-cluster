@@ -43,6 +43,14 @@ if ! grep -q "127.0.1.1.*${TARGET_HOSTNAME}" /etc/hosts; then
   echo "127.0.1.1 ${TARGET_HOSTNAME} ${TARGET_HOSTNAME}.local" >> /etc/hosts
 fi
 
+# Register cluster peer IPs in /etc/hosts for instant resolution alongside Avahi mDNS
+sed -i '/# GRIP-CLUSTER-HOSTS/d' /etc/hosts
+cat <<EOF >> /etc/hosts
+${GRIP_EDGE_HOST:-192.168.0.121} grip-edge grip-edge.local grip.local # GRIP-CLUSTER-HOSTS
+${GRIP_APP_HOST:-192.168.0.148} grip-app grip-app.local # GRIP-CLUSTER-HOSTS
+${GRIP_DB_HOST:-192.168.0.23} grip-db grip-db.local # GRIP-CLUSTER-HOSTS
+EOF
+
 # Configure Avahi to publish mDNS reliably on Ethernet & Wi-Fi when repositioned
 mkdir -p /etc/avahi
 cat <<'AVAHI' > /etc/avahi/avahi-daemon.conf

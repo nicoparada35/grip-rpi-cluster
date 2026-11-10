@@ -14,7 +14,7 @@ require_root
 ensure_grip_directories
 load_cluster_env
 
-DB_HOST="${GRIP_DB_HOST:-grip-db.local}"
+DB_HOST="${GRIP_DB_HOST:-192.168.0.23}"
 DB_PORT="${GRIP_DB_PORT:-5432}"
 
 log_info "Checking reachability of Database Node (${DB_HOST}:${DB_PORT})..."

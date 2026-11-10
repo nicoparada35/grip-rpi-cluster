@@ -109,43 +109,43 @@ You have **two ways** to install everything:
 ### Option A: One-Command Fleet Deployment from Your Mac (`deploy-fleet-ssh.sh`)
 From your Mac terminal inside `grip-rpi-cluster`, run:
 ```bash
-bash scripts/deploy-fleet-ssh.sh pi grip-db.local grip-app.local grip-edge.local
+bash scripts/deploy-fleet-ssh.sh pi 192.168.0.23 192.168.0.148 192.168.0.121
 ```
-*(Or pass their LAN IP addresses if mDNS isn't active on your Mac yet, e.g. `bash scripts/deploy-fleet-ssh.sh pi 192.168.1.103 192.168.1.102 192.168.1.101`).*
+*(Those 3 IPs — `192.168.0.23` for `db`, `192.168.0.148` for `app`, and `192.168.0.121` for `edge` — are already configured as the defaults in `deploy-fleet-ssh.sh` and `config/cluster.env.example`!)*
 
 This script automatically:
 1. Syncs the entire `grip-rpi-cluster` repo + `grip-basketball-fullstack` submodule to each Pi.
-2. Provisions **RPi #3 (`db`)** first and waits until PostgreSQL 16 is healthy.
-3. Provisions **RPi #2 (`app`)** second, compiles the Spring Boot ARM64 container, and connects it to `grip-db.local:5432`.
-4. Provisions **RPi #1 (`edge`)** third, starts `grip-livesync` + `grip-frontend` (Nginx), and links `/api/` to `grip-app.local:8080`.
+2. Provisions **RPi #3 (`db` — `192.168.0.23`)** first and waits until PostgreSQL 16 is healthy.
+3. Provisions **RPi #2 (`app` — `192.168.0.148`)** second, compiles the Spring Boot ARM64 container, and connects it to `192.168.0.23:5432`.
+4. Provisions **RPi #1 (`edge` — `192.168.0.121`)** third, starts `grip-livesync` + `grip-frontend` (Nginx), and links `/api/` to `192.168.0.148:8080`.
 
 ---
 
 ### Option B: Cloning & Running Directly on Each Raspberry Pi
 SSH into each Raspberry Pi and clone the repository with `--recurse-submodules`:
 
-#### 1. On RPi #3 — Database Node (`grip-db`)
+#### 1. On RPi #3 — Database Node (`192.168.0.23` / `grip-db`)
 ```bash
-ssh pi@grip-db.local
+ssh pi@192.168.0.23
 git clone --recurse-submodules https://github.com/nicoparada35/grip-rpi-cluster.git ~/grip-rpi-cluster
 cd ~/grip-rpi-cluster
-sudo bash scripts/install-node.sh --role db
+sudo bash scripts/install-node.sh --role db --db-host 192.168.0.23 --app-host 192.168.0.148 --edge-host 192.168.0.121
 ```
 
-#### 2. On RPi #2 — Backend Application Node (`grip-app`)
+#### 2. On RPi #2 — Backend Application Node (`192.168.0.148` / `grip-app`)
 ```bash
-ssh pi@grip-app.local
+ssh pi@192.168.0.148
 git clone --recurse-submodules https://github.com/nicoparada35/grip-rpi-cluster.git ~/grip-rpi-cluster
 cd ~/grip-rpi-cluster
-sudo bash scripts/install-node.sh --role app
+sudo bash scripts/install-node.sh --role app --db-host 192.168.0.23 --app-host 192.168.0.148 --edge-host 192.168.0.121
 ```
 
-#### 3. On RPi #1 — Edge Web & Live-Sync Node (`grip-edge`)
+#### 3. On RPi #1 — Edge Web & Live-Sync Node (`192.168.0.121` / `grip-edge`)
 ```bash
-ssh pi@grip-edge.local
+ssh pi@192.168.0.121
 git clone --recurse-submodules https://github.com/nicoparada35/grip-rpi-cluster.git ~/grip-rpi-cluster
 cd ~/grip-rpi-cluster
-sudo bash scripts/install-node.sh --role edge
+sudo bash scripts/install-node.sh --role edge --db-host 192.168.0.23 --app-host 192.168.0.148 --edge-host 192.168.0.121
 ```
 
 ---

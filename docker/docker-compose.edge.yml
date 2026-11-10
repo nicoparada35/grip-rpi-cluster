@@ -15,7 +15,7 @@ services:
     environment:
       GRIP_FRONTEND_DIR: /app/frontend
       GRIP_DATA_DIR: /app/data
-      GRIP_BACKEND_HOST: ${GRIP_APP_HOST:-grip-app.local}
+      GRIP_BACKEND_HOST: ${GRIP_APP_HOST:-192.168.0.148}
       GRIP_BACKEND_PORT: "${GRIP_BACKEND_PORT:-8080}"
     volumes:
       - ../submodules/grip-basketball-fullstack/frontend:/app/frontend:ro

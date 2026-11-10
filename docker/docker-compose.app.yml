@@ -31,14 +31,14 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-rpi}
-      GRIP_DB_URL: jdbc:postgresql://${GRIP_DB_HOST:-grip-db.local}:${GRIP_DB_PORT:-5432}/${GRIP_DB_NAME:-gripdb}
+      GRIP_DB_URL: jdbc:postgresql://${GRIP_DB_HOST:-192.168.0.23}:${GRIP_DB_PORT:-5432}/${GRIP_DB_NAME:-gripdb}
       GRIP_DB_USER: ${GRIP_DB_USER:-grip}
       GRIP_DB_PASSWORD: ${GRIP_DB_PASSWORD:-GripRpiCluster2026!}
       GRIP_JWT_SECRET: ${GRIP_JWT_SECRET:-GRIP_RPI4_CLUSTER_LOCAL_SECRET_KEY_2026_64_BYTES_MINIMUM_SECURITY}
       GRIP_JWT_EXPIRATION_MS: ${GRIP_JWT_EXPIRATION_MS:-2592000000}
       GRIP_ADMIN_EMAIL: ${GRIP_ADMIN_EMAIL:-admin@gripbasketball.com}
       GRIP_ADMIN_PASSWORD: ${GRIP_ADMIN_PASSWORD:-GripAdmin2026!}
-      GRIP_FRONTEND_URL: ${GRIP_FRONTEND_URL:-http://grip.local}
+      GRIP_FRONTEND_URL: ${GRIP_FRONTEND_URL:-http://192.168.0.121}
       GRIP_AUTO_VERIFY_LOCAL: ${GRIP_AUTO_VERIFY_LOCAL:-true}
       GRIP_SMTP_HOST: ${GRIP_SMTP_HOST:-grip-mailpit}
       GRIP_SMTP_PORT: ${GRIP_SMTP_PORT:-1025}

@@ -14,7 +14,7 @@ require_root
 ensure_grip_directories
 load_cluster_env
 
-APP_HOST="${GRIP_APP_HOST:-grip-app.local}"
+APP_HOST="${GRIP_APP_HOST:-192.168.0.148}"
 APP_PORT="${GRIP_BACKEND_PORT:-8080}"
 
 # Also publish grip.local alias via Avahi if this is the edge node

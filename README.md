@@ -11,11 +11,11 @@ This repository tracks [`grip-basketball-fullstack`](https://github.com/Victor15
 You have **5x Raspberry Pi 4B (4GB RAM, 32GB microSD)** available. **You do not need to use all 5.**
 The optimal production architecture uses **3 Raspberry Pis**, keeping **2 unused** as spares (or optionally using 1 for single-node portable tournaments, or a 4th as an HDMI Court Scoreboard Kiosk):
 
-| Node | Hostname (mDNS) | Assigned Role (`--role`) | Services Running | RAM Usage | Why Isolated? |
+| Node | LAN IP / Hostname | Assigned Role (`--role`) | Services Running | RAM Usage | Why Isolated? |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **RPi #1** | `grip-edge.local` | `edge` | **Nginx Reverse Proxy & Static Web** (`:80`) + **Python Live-Sync 3x3 & Sports DB Engine** (`:5500`) | ~350 MB | Ultra-low latency for court tablets (`live-tracker.html`) and player browsers. |
-| **RPi #2** | `grip-app.local` | `app` | **Spring Boot 3 REST API** (`:8080`, Java 17 ARM64) + **Mailpit Local SMTP/Webmail** (`:1025` / `:8025`) | ~1.2 GB (2.2 GB during Maven build) | Isolates heavy JVM & Maven CD compilation so it never starves Nginx or PostgreSQL of RAM. |
-| **RPi #3** | `grip-db.local` | `db` | **PostgreSQL 16 ARM64** (`:5432`, RPi4 tuned) + **Daily `pg_dump` Auto-Backup** (`grip-backup.timer`) | ~600 MB | Dedicated microSD I/O and memory cache for database persistence. |
+| **RPi #1** | `192.168.0.121` (`grip-edge.local`) | `edge` | **Nginx Reverse Proxy & Static Web** (`:80`) + **Python Live-Sync 3x3 & Sports DB Engine** (`:5500`) | ~350 MB | Ultra-low latency for court tablets (`live-tracker.html`) and player browsers. |
+| **RPi #2** | `192.168.0.148` (`grip-app.local`) | `app` | **Spring Boot 3 REST API** (`:8080`, Java 17 ARM64) + **Mailpit Local SMTP/Webmail** (`:1025` / `:8025`) | ~1.2 GB (2.2 GB during Maven build) | Isolates heavy JVM & Maven CD compilation so it never starves Nginx or PostgreSQL of RAM. |
+| **RPi #3** | `192.168.0.23` (`grip-db.local`) | `db` | **PostgreSQL 16 ARM64** (`:5432`, RPi4 tuned) + **Daily `pg_dump` Auto-Backup** (`grip-backup.timer`) | ~600 MB | Dedicated microSD I/O and memory cache for database persistence. |
 | *RPi #4 (Optional)* | `grip-kiosk.local` | `kiosk` | **Fullscreen Chromium HDMI Kiosk** (`live-tracker.html`) | ~500 MB | Only needed if plugging an RPi directly into a court TV/monitor via HDMI. |
 | *RPi #4 & #5* | — | *Unused / Spare* | Kept powered off as cold spares | 0 MB | Saves power, switch ports, and SD wear. |
 

@@ -13,9 +13,9 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PI_USER="${1:-pi}"
-DB_HOST="${2:-grip-db.local}"
-APP_HOST="${3:-grip-app.local}"
-EDGE_HOST="${4:-grip-edge.local}"
+DB_HOST="${2:-192.168.0.23}"
+APP_HOST="${3:-192.168.0.148}"
+EDGE_HOST="${4:-192.168.0.121}"
 
 deploy_to_pi() {
   local role="$1"
