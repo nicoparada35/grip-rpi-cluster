@@ -46,9 +46,9 @@ cd "${GRIP_REPO_DIR}"
 git config --global --add safe.directory "${GRIP_REPO_DIR}" || true
 git config --global --add safe.directory "${GRIP_REPO_DIR}/${GRIP_WEB_SUBMODULE_PATH:-submodules/grip-basketball-fullstack}" || true
 
-# Initialize & update the web page submodule if not populated
+# Initialize & update the web page submodule if not populated (only needed on app, edge, all-in-one, kiosk)
 SUBMODULE_DIR="${GRIP_REPO_DIR}/${GRIP_WEB_SUBMODULE_PATH:-submodules/grip-basketball-fullstack}"
-if [[ ! -f "${SUBMODULE_DIR}/frontend/index.html" ]]; then
+if [[ "${NODE_ROLE}" != "db" && ! -f "${SUBMODULE_DIR}/frontend/index.html" ]]; then
   log_info "Initializing git submodule (${GRIP_WEB_SUBMODULE_PATH:-submodules/grip-basketball-fullstack})..."
   git submodule sync --recursive || true
   git submodule update --init --recursive || true
