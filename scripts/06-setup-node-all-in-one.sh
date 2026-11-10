@@ -15,6 +15,8 @@ ensure_grip_directories
 load_cluster_env
 
 log_info "Building & starting All-in-One GRIP Stack on $(hostname)..."
+chown -R 70:70 "${GRIP_POSTGRES_DIR}" 2>/dev/null || true
+chmod 777 "${GRIP_POSTGRES_DIR}"
 cd "${GRIP_REPO_DIR}/docker"
 docker compose --env-file "${GRIP_ENV_FILE}" -f docker-compose.all-in-one.yml up -d --build
 

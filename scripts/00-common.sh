@@ -48,8 +48,10 @@ ensure_grip_directories() {
     "${GRIP_LOG_DIR}" \
     "${GRIP_STATE_DIR}"
 
-  chmod 755 "${GRIP_BASE_DIR}" "${GRIP_DATA_DIR}" "${GRIP_COURT_DATA_DIR}" "${GRIP_LOG_DIR}" "${GRIP_STATE_DIR}"
-  chmod 700 "${GRIP_POSTGRES_DIR}" "${GRIP_BACKUP_DIR}"
+  chmod 755 "${GRIP_BASE_DIR}" "${GRIP_DATA_DIR}" "${GRIP_COURT_DATA_DIR}" "${GRIP_LOG_DIR}" "${GRIP_STATE_DIR}" "${GRIP_BACKUP_DIR}"
+  # postgres:16-alpine runs as UID:GID 70:70 inside the container; allow it to create /var/lib/postgresql/data/pgdata
+  chown -R 70:70 "${GRIP_POSTGRES_DIR}" 2>/dev/null || true
+  chmod 777 "${GRIP_POSTGRES_DIR}"
   log_ok "Directory hierarchy verified at ${GRIP_BASE_DIR}."
 }
 

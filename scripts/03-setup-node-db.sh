@@ -16,6 +16,10 @@ load_cluster_env
 
 log_info "Starting GRIP Database Node (PostgreSQL 16 ARM64) on $(hostname)..."
 
+# Ensure postgres container user (UID 70 in Alpine) can create pgdata directory on bind mount
+chown -R 70:70 "${GRIP_POSTGRES_DIR}" 2>/dev/null || true
+chmod 777 "${GRIP_POSTGRES_DIR}"
+
 cd "${GRIP_REPO_DIR}/docker"
 docker compose --env-file "${GRIP_ENV_FILE}" -f docker-compose.db.yml up -d
 
