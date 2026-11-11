@@ -65,6 +65,24 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # Optional Cloudflare Zero Trust Tunnel for https://gripbasketball.com
+  grip-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: grip-tunnel
+    restart: always
+    depends_on:
+      - grip-frontend
+    networks:
+      - grip-edge-net
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN:-}
+    profiles:
+      - tunnel
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+
 networks:
   grip-edge-net:
     driver: bridge

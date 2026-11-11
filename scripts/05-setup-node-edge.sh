@@ -35,6 +35,11 @@ log_info "Building & starting GRIP Frontend (Nginx) + Live-Sync Court Engine..."
 cd "${GRIP_REPO_DIR}/docker"
 docker compose --env-file "${GRIP_ENV_FILE}" -f docker-compose.edge.yml up -d --build
 
+if [[ -n "${CLOUDFLARE_TUNNEL_TOKEN:-}" ]]; then
+  log_info "Cloudflare Tunnel Token found; starting grip-tunnel for public HTTPS access..."
+  docker compose --env-file "${GRIP_ENV_FILE}" -f docker-compose.edge.yml --profile tunnel up -d grip-tunnel
+fi
+
 wait_for_tcp "127.0.0.1" "${GRIP_LIVESYNC_PORT:-5500}" 20 2
 wait_for_tcp "127.0.0.1" "${GRIP_WEB_PORT:-80}" 20 2
 
